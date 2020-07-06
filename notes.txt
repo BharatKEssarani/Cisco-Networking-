@@ -1,0 +1,299 @@
+router 0
+==========================================================
+en gi0/0
+int gi0/0
+no sh
+
+
+int gi0/1
+
+
+
+router1
+
+==========================
+en
+conf t
+int gi0/0
+no sh
+int s0/0/0
+
+
+
+router2
+=========================================================
+en
+conf t
+int gi0/0
+no sh
+
+int gi0/1
+no sh
+
+
+
+switch 0
+=========================================================
+
+en
+conf t
+vlan 10
+name follow instructions
+vlan 20
+name pay attention
+
+
+
+switch 1
+============================================
+
+en
+conf t
+vlan 30
+name tatti3
+vlan 40
+name tatti4
+
+
+====================================================================
+
+
+
+layer 2
+
+
+
+switch 0
+
+
+Switch(config)#int fa0/1
+Switch(config-if)#sw acc vlan 10
+Switch(config-if)#int fa0/2
+Switch(config-if)#sw acc vlan 20
+Switch(config-if)#int gi0/1
+Switch(config-if)#sw mod tr
+Switch(config-if)#
+
+
+
+same thing swithc1
+
+Switch#en
+Switch#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Switch(config)#int fa0/1
+Switch(config-if)#sw acc vlan 30
+Switch(config-if)#int fa0/2
+Switch(config-if)#sw acc vlan 40
+Switch(config-if)#int gi0/1
+Switch(config-if)#sw mod tr
+
+
+
+
+
+int gi0
+
+
+
+
+router 0
+
+
+
+Router#en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int s0/0/0
+Router(config-if)#ip address 1.1.1.1 255.255.255.252
+Router(config-if)#
+Router(config-if)#
+
+
+
+Router>
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int s0/0/0
+Router(config-if)#ip address 1.1.1.2 255.255.255.252
+Router(config-if)#
+Router#
+%SYS-5-CONFIG_I: Configur
+
+
+
+router1
+========================================
+
+
+
+Router>
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int s0/0/0
+Router(config-if)#ip address 1.1.1.2 255.255.255.252
+Router(config-if)#
+Router#
+%SYS-5-CONFIG_I: Configur
+
+
+
+
+==========================================================
+
+
+
+router 0
+
+
+
+Router#en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router 0
+                      ^
+% Invalid input detected at '^' marker.
+	
+Router(config)#router ospf 1
+Router(config-router)#n
+% Ambiguous command: "n"
+Router(config-router)#?
+
+
+
+========================================================
+
+
+router 0
+
+Router#en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router ospf 1
+Router(config-router)#network 192.168.20.0 0.0.0.255 area 1
+Router(config-router)#network 192.168.10.0 0.0.0.255 area 1
+
+
+
+Router#
+Router#en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router ospf 1
+Router(config-router)#
+Router#
+
+
+Router#en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router ospf 1
+Router(config-router)#neighbor 1.1.1.2
+
+
+
+=========
+router 0
+============================
+
+
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int s0/0/0
+Router(config-if)#ip address 1.1.1.2 255.255.255.252
+Router(config-if)#
+Router#
+
+
+
+router 0 final looks like below
+
+
+
+
+!
+interface GigabitEthernet0/1
+ no ip address
+ duplex auto
+ speed auto
+!
+interface Serial0/0/0
+ ip address 1.1.1.1 255.255.255.252
+!
+
+!
+router ospf 1
+ log-adjacency-changes
+ network 192.168.10.0 0.0.0.255 area 1
+ network 192.168.20.0 0.0.0.255 area 1
+ neighbor 1.1.1.2
+====================
+
+
+router 1
+
+
+en
+conf t
+router ospf 1
+neighbor 1.1.1.1
+
+
+Router#en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#router ospf 1
+Router(config-router)#neighbor 1.1.1.1
+Router(config-router)#network 192.168.30.0 255.255.255.0 area 1
+Router(config-router)#network 192.168.40.0 255.255.255.0 area 1
+Router(config-router)#
+Router(config-router)#
+Router(config-router)#
+
+
+
+
+
+====================================================================
+
+router 1 
+
+show ip route
+Router>
+Router>en
+Router#conf t
+Enter configuration commands, one per line.  End with CNTL/Z.
+Router(config)#int s0/0/0
+Router(config-if)#ip address 1.1.1.2 255.255.255.252
+Router(config-if)#
+Router#
+
+======================
+
+
+
+
+router 1 looks like this below
+
+
+interface Serial0/0/0
+ ip address 1.1.1.2 255.255.255.252
+ clock rate 2000000
+!
+
+
+
+
+router ospf 1
+ log-adjacency-changes
+ network 192.168.30.0 0.0.0.255 area 1
+ network 192.168.40.0 0.0.0.255 area 1
+ neighbor 1.1.1.1
+!
+ip classless
